@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کۆمپنیاکەمان — داواکاری کڕین</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-icon">🛒</div>
+        <div>
+          <h1 id="company-name">کۆمپنیاکەمان</h1>
+          <p class="tagline" id="company-tagline">لیستی داواکاری کڕین</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-add-request">+ داواکاری نوێ</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p>لێرە دەتوانیت ئەو شتانە بنووسیت کە دەتەوێت بکرێن. هەموو کەس دەتوانێت ببینێت و کاتێک کڕدرا، نیشانەی «کڕدرا» دەکرێت.</p>
+    </section>
+
+    <section class="stats" id="stats">
+      <div class="stat-card">
+        <span class="stat-number" id="stat-pending">0</span>
+        <span class="stat-label">چاوەڕوان</span>
+      </div>
+      <div class="stat-card stat-done">
+        <span class="stat-number" id="stat-done">0</span>
+        <span class="stat-label">کڕدراو</span>
+      </div>
+    </section>
+
+    <section class="filters">
+      <button class="filter-btn active" data-filter="pending">چاوەڕوانەکان</button>
+      <button class="filter-btn" data-filter="purchased">کڕدراوەکان</button>
+      <button class="filter-btn" data-filter="all">هەموو</button>
+    </section>
+
+    <section class="requests" id="requests-list">
+      <div class="loading" id="loading">بارکردن...</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> <span id="footer-name">کۆمپنیاکەمان</span></p>
+    </div>
+  </footer>
+
+  <!-- Modal: Add Request -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">داواکاری نوێ</h2>
+        <button class="modal-close" id="modal-close" aria-label="داخستن">×</button>
+      </div>
+      <form id="request-form">
+        <div class="form-group">
+          <label for="title">ناوی شتەکە *</label>
+          <input type="text" id="title" name="title" required placeholder="وەک: پڕینتەری HP">
+        </div>
+        <div class="form-group">
+          <label for="description">وردەکاری</label>
+          <textarea id="description" name="description" rows="3" placeholder="مۆدێل، ڕەنگ، ژمارە..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quantity">ژمارە</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1">
+          </div>
+          <div class="form-group">
+            <label for="contact">پەیوەندی</label>
+            <input type="text" id="contact" name="contact" placeholder="ناو یان ژمارەی مۆبایل">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="btn-cancel">پاشگەزبوونەوە</button>
+          <button type="submit" class="btn btn-primary">ناردن</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
