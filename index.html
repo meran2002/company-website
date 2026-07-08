@@ -3,88 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>کۆمپنیاکەمان — داواکاری کڕین</title>
+  <title>کۆمپنیا — داواکاری بەشەکان</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="bg-glow"></div>
+
   <header class="header">
     <div class="container header-inner">
       <div class="brand">
-        <div class="brand-icon">🛒</div>
+        <div class="brand-icon">◈</div>
         <div>
           <h1 id="company-name">کۆمپنیاکەمان</h1>
-          <p class="tagline" id="company-tagline">لیستی داواکاری کڕین</p>
+          <p class="tagline" id="company-tagline">سیستەمی داواکاری بەشەکان</p>
         </div>
       </div>
-      <button class="btn btn-primary" id="btn-add-request">+ داواکاری نوێ</button>
+      <div class="header-actions">
+        <span class="admin-pill" id="admin-pill" hidden>ئەدمین ✓</span>
+        <button class="btn btn-ghost" id="btn-admin">ئەدمین</button>
+        <button class="btn btn-neon" id="btn-add-request">+ داواکاری نوێ</button>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <p>لێرە دەتوانیت ئەو شتانە بنووسیت کە دەتەوێت بکرێن. هەموو کەس دەتوانێت ببینێت و کاتێک کڕدرا، نیشانەی «کڕدرا» دەکرێت.</p>
+    <section class="hero-panel">
+      <div>
+        <h2 class="hero-title">داواکاری کاڵا بۆ بەشەکانت</h2>
+        <p class="hero-text">هەر بەشە فقط لە بەشی خۆی داواکاری دەنێرێت (وێنە/ڤیدیۆ + وەسف). سنور: <strong>١٠ کاڵا لە ڕۆژێکدا</strong> بۆ هەر بەشێک.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="mini-stat">
+          <span id="stat-today">0</span>
+          <small>ئەمڕۆ</small>
+        </div>
+        <div class="mini-stat">
+          <span id="stat-pending">0</span>
+          <small>چاوەڕوان</small>
+        </div>
+      </div>
     </section>
 
-    <section class="stats" id="stats">
-      <div class="stat-card">
-        <span class="stat-number" id="stat-pending">0</span>
-        <span class="stat-label">چاوەڕوان</span>
-      </div>
-      <div class="stat-card stat-done">
-        <span class="stat-number" id="stat-done">0</span>
-        <span class="stat-label">کڕدراو</span>
-      </div>
-    </section>
+    <section class="dept-grid" id="dept-grid" aria-label="بەشەکان"></section>
 
-    <section class="filters">
-      <button class="filter-btn active" data-filter="pending">چاوەڕوانەکان</button>
-      <button class="filter-btn" data-filter="purchased">کڕدراوەکان</button>
-      <button class="filter-btn" data-filter="all">هەموو</button>
+    <section class="toolbar">
+      <div class="toolbar-title">
+        <h3 id="current-dept-title">هەموو بەشەکان</h3>
+        <p id="dept-limit-hint">سنوری ڕۆژانە: ١٠ کاڵا بۆ هەر بەش</p>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="pending">چاوەڕوان</button>
+        <button class="filter-btn" data-filter="all">هەموو</button>
+      </div>
     </section>
 
     <section class="requests" id="requests-list">
-      <div class="loading" id="loading">بارکردن...</div>
+      <div class="loading">بارکردن...</div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p>© <span id="year"></span> <span id="footer-name">کۆمپنیاکەمان</span></p>
+      <p>© <span id="year"></span> <span id="footer-name">کۆمپنیاکەمان</span> — سیستەمی ناوخۆیی</p>
     </div>
   </footer>
 
-  <!-- Modal: Add Request -->
+  <!-- Add Request -->
   <div class="modal-overlay" id="modal-overlay" hidden>
     <div class="modal" role="dialog" aria-labelledby="modal-title">
       <div class="modal-header">
         <h2 id="modal-title">داواکاری نوێ</h2>
         <button class="modal-close" id="modal-close" aria-label="داخستن">×</button>
       </div>
-      <form id="request-form">
+      <form id="request-form" class="modal-body">
         <div class="form-group">
-          <label for="title">ناوی شتەکە *</label>
-          <input type="text" id="title" name="title" required placeholder="وەک: پڕینتەری HP">
+          <label for="department">بەش *</label>
+          <select id="department" required></select>
         </div>
         <div class="form-group">
-          <label for="description">وردەکاری</label>
-          <textarea id="description" name="description" rows="3" placeholder="مۆدێل، ڕەنگ، ژمارە..."></textarea>
+          <label for="title">ناوی کاڵا *</label>
+          <input type="text" id="title" required placeholder="وەک: قورسە، بۆل، کێبل...">
+        </div>
+        <div class="form-group">
+          <label for="description">وەسف *</label>
+          <textarea id="description" rows="3" required placeholder="وردەکاری، مۆدێل، ڕەنگ، تێبینی..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="media">وێنە یان ڤیدیۆ</label>
+          <input type="file" id="media" accept="image/*,video/*">
+          <p class="hint">وێنە تا ١٠ مێگابایت · ڤیدیۆ تا ٥٠ مێگابایت</p>
+          <div id="media-preview" class="media-preview" hidden></div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="quantity">ژمارە</label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1">
+            <input type="number" id="quantity" min="1" value="1">
           </div>
           <div class="form-group">
-            <label for="contact">پەیوەندی</label>
-            <input type="text" id="contact" name="contact" placeholder="ناو یان ژمارەی مۆبایل">
+            <label for="contact">ناوی داواکار</label>
+            <input type="text" id="contact" placeholder="ناو یان ژمارە">
           </div>
         </div>
+        <p class="limit-note" id="form-limit-note"></p>
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" id="btn-cancel">پاشگەزبوونەوە</button>
-          <button type="submit" class="btn btn-primary">ناردن</button>
+          <button type="button" class="btn btn-ghost" id="btn-cancel">پاشگەزبوونەوە</button>
+          <button type="submit" class="btn btn-neon">ناردن</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Login -->
+  <div class="modal-overlay" id="admin-overlay" hidden>
+    <div class="modal modal-sm" role="dialog">
+      <div class="modal-header">
+        <h2>داخڵبوونی ئەدمین</h2>
+        <button class="modal-close" id="admin-close" aria-label="داخستن">×</button>
+      </div>
+      <form id="admin-form" class="modal-body">
+        <div class="form-group">
+          <label for="admin-code">کۆدی ئەدمین</label>
+          <input type="password" id="admin-code" inputmode="numeric" autocomplete="off" placeholder="••••" required>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="admin-cancel">پاشگەزبوونەوە</button>
+          <button type="submit" class="btn btn-neon">داخڵبوون</button>
         </div>
       </form>
     </div>
